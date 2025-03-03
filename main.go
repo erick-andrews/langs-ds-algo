@@ -12,9 +12,9 @@ func main() {
 	//Let's see the types of the above vars:
 	fmt.Printf("conferenceTickets is %T, conferenceName is %T \n", conferenceTickets, conferenceName)
 
-	askUserNameTicketsNum()
+	askUserNameTicketsNum(remainingTickets)
 
-	fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
+	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
 	// fmt.Println("The number of tickets left is:", conferenceTickets)
 }
 
@@ -23,14 +23,28 @@ func main() {
 
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
-func askUserNameTicketsNum() {
-	var userName string
+func askUserNameTicketsNum(remainingTickets uint) {
+	var firstName string
+	var lastName string
+	var email string
 	var userTickets uint
 	// need a pointer! it's a ... special variable!
 	// fmt.Println(&userTickets) --> allow printing place in memory.
 	fmt.Println("Enter your first name:")
-	fmt.Scan(&userName)
+	fmt.Scan(&firstName)
 
-	userTickets = 2
-	fmt.Printf("User %v booked %v tickets.\n", userName, userTickets)
+	fmt.Println("Enter your last name:")
+	fmt.Scan(&lastName)
+
+	fmt.Println("Enter your email:")
+	fmt.Scan(&email)
+
+	fmt.Println("Enter your # of tickets:")
+	fmt.Scan(&userTickets)
+
+	remainingTickets = remainingTickets - userTickets
+
+	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
+
+	fmt.Printf("Remaining tickets: %v", remainingTickets)
 }
