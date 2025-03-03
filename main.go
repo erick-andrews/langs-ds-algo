@@ -15,7 +15,7 @@ func main() {
 	remainingTickets = askUserNameTicketsNum(remainingTickets)
 
 	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
-	// fmt.Println("The number of tickets left is:", conferenceTickets)
+	fmt.Println("The number of tickets left is:", remainingTickets)
 }
 
 // Data types supported:
@@ -46,7 +46,7 @@ func askUserNameTicketsNum(remainingTickets uint) uint {
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
 
-	fmt.Printf("Remaining tickets: %v", remainingTickets)
+	// fmt.Printf("Remaining tickets: %v", remainingTickets)
 
 	return remainingTickets // Return the updated value
 }
