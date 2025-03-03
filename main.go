@@ -12,7 +12,7 @@ func main() {
 	//Let's see the types of the above vars:
 	fmt.Printf("conferenceTickets is %T, conferenceName is %T \n", conferenceTickets, conferenceName)
 
-	askUserNameTicketsNum(remainingTickets)
+	remainingTickets = askUserNameTicketsNum(remainingTickets)
 
 	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
 	// fmt.Println("The number of tickets left is:", conferenceTickets)
@@ -23,7 +23,7 @@ func main() {
 
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
-func askUserNameTicketsNum(remainingTickets uint) {
+func askUserNameTicketsNum(remainingTickets uint) uint {
 	var firstName string
 	var lastName string
 	var email string
@@ -42,9 +42,11 @@ func askUserNameTicketsNum(remainingTickets uint) {
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
 
-	remainingTickets = remainingTickets - userTickets
+	remainingTickets -= userTickets
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
 
 	fmt.Printf("Remaining tickets: %v", remainingTickets)
+
+	return remainingTickets // Return the updated value
 }
