@@ -26,8 +26,11 @@ func main() {
 func askUserNameTicketsNum() {
 	var userName string
 	var userTickets uint
+	// need a pointer! it's a ... special variable!
+	// fmt.Println(&userTickets) --> allow printing place in memory.
+	fmt.Println("Enter your first name:")
+	fmt.Scan(&userName)
 
-	userName = "Tom"
 	userTickets = 2
 	fmt.Printf("User %v booked %v tickets.\n", userName, userTickets)
 }
