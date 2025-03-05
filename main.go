@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	conferenceName := "Go Conference"
@@ -40,6 +43,13 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) uint {
 
 	createArrays(bookings, firstName, lastName)
 
+	firstNames := []string{}
+	for _, booking := range *bookings {
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+	}
+	fmt.Printf("The first names of bookings are %v\n", firstNames)
+
 	fmt.Println("Enter your email:")
 	fmt.Scan(&email)
 
@@ -69,6 +79,6 @@ func createArrays(bookings *[]string, firstName string, lastName string) {
 	fmt.Printf("Array type: %T\n", bookings)
 	fmt.Printf("Array length: %v\n", len(*bookings))
 
-	fmt.Printf("These are all our bookings: %v\n", bookings)
+	fmt.Printf("These are all our bookings: %v\n", *bookings)
 
 }
