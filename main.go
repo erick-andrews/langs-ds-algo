@@ -16,6 +16,13 @@ func main() {
 	fmt.Printf("conferenceTickets is %T, conferenceName is %T \n", conferenceTickets, conferenceName)
 	var bookings []string
 	for {
+		// NoTicketsRemaining := remainingTickets == 0 if referencing
+		// this statement more than once, can be saved as var
+		if remainingTickets == 0 {
+			// end program
+			fmt.Println("Oops, our conference is totally booked. Come back next year.")
+			break
+		}
 		remainingTickets = askUserNameTicketsNum(&bookings, remainingTickets)
 	}
 
@@ -55,7 +62,10 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) uint {
 
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
-
+	if userTickets > remainingTickets {
+		fmt.Printf("we only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
+		return remainingTickets
+	}
 	remainingTickets -= userTickets
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
