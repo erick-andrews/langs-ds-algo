@@ -23,7 +23,14 @@ func main() {
 			fmt.Println("Oops, our conference is totally booked. Come back next year.")
 			break
 		}
-		remainingTickets = askUserNameTicketsNum(&bookings, remainingTickets)
+		var shouldExit bool
+
+		remainingTickets, shouldExit = askUserNameTicketsNum(&bookings, remainingTickets)
+
+		if shouldExit {
+			fmt.Println("Exiting program...")
+			break
+		}
 	}
 
 	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
@@ -35,7 +42,7 @@ func main() {
 
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
-func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) uint {
+func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, bool) {
 	var firstName string
 	var lastName string
 	var email string
@@ -62,16 +69,17 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) uint {
 
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
+
 	if userTickets > remainingTickets {
 		fmt.Printf("we only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
-		return remainingTickets
+		return remainingTickets, true
 	}
 	remainingTickets -= userTickets
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
 
 	// fmt.Printf("Remaining tickets: %v", remainingTickets)
-	return remainingTickets // Return the updated value
+	return remainingTickets, false // Return the updated value
 }
 
 func createArrays(bookings *[]string, firstName string, lastName string) {
