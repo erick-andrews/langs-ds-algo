@@ -55,8 +55,6 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Println("Enter your last name:")
 	fmt.Scan(&lastName)
 
-	createArrays(bookings, firstName, lastName)
-
 	firstNames := []string{}
 	for _, booking := range *bookings {
 		var names = strings.Fields(booking)
@@ -70,10 +68,22 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
 
-	if userTickets > remainingTickets {
+	isValidName := len(firstName) >= 1 && len(lastName) >= 1
+	isValidEmail := strings.Contains(email, "@")
+
+	if !isValidName || !isValidEmail {
+		fmt.Println("You entered a username or email in an invalid format")
+		return remainingTickets, true
+	}
+
+	isValidTickets := userTickets > 0 && userTickets > remainingTickets
+
+	if !isValidTickets {
 		fmt.Printf("we only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
 		return remainingTickets, true
 	}
+
+	createArrays(bookings, firstName, lastName)
 	remainingTickets -= userTickets
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
