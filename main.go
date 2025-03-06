@@ -55,33 +55,39 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Println("Enter your last name:")
 	fmt.Scan(&lastName)
 
-	firstNames := []string{}
-	for _, booking := range *bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
-	}
-	fmt.Printf("The first names of bookings are %v\n", firstNames)
-
 	fmt.Println("Enter your email:")
 	fmt.Scan(&email)
 
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
 
-	isValidName := len(firstName) >= 1 && len(lastName) >= 1
-	isValidEmail := strings.Contains(email, "@")
-
-	if !isValidName || !isValidEmail {
-		fmt.Println("You entered a username or email in an invalid format")
-		return remainingTickets, true
+	continueFlag := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+	if !continueFlag {
+		fmt.Println("One of the inputs failed.")
+		return remainingTickets, continueFlag
 	}
 
-	isValidTickets := userTickets > 0 && userTickets > remainingTickets
-
-	if !isValidTickets {
-		fmt.Printf("we only have %v tickets remaining, so you can't book %v tickets\n", remainingTickets, userTickets)
-		return remainingTickets, true
+	firstNames := []string{}
+	for _, booking := range *bookings {
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
 	}
+
+	fmt.Printf("The first names of bookings are %v\n", firstNames)
+
+	// example syntax for a switch statement
+	// city := "London"
+	// switch city {
+	// 	case "New York", "Boston":
+	// 		execute code for new york or boston tickets
+	// 	case "Singapore", "Shanghai":
+	// 		execute code for singapore or shanghai
+	// 	case "etc etc":
+	// 		and so on
+	// 	default:
+	//		fmt.println("No city selected!")
+	//		break
+	// }
 
 	createArrays(bookings, firstName, lastName)
 	remainingTickets -= userTickets
@@ -89,7 +95,18 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
 
 	// fmt.Printf("Remaining tickets: %v", remainingTickets)
-	return remainingTickets, false // Return the updated value
+	return remainingTickets, continueFlag // Return the updated value
+}
+
+func validateUserInput(firstName string, lastName string, email string, userTickets uint, remainingTickets uint) bool {
+	isValidName := len(firstName) >= 1 && len(lastName) >= 1
+	isValidEmail := strings.Contains(email, "@")
+	isValidTickets := userTickets > 0 && userTickets > remainingTickets
+	if !isValidEmail || !isValidName || !isValidTickets {
+		return false
+	} else {
+		return true
+	}
 }
 
 func createArrays(bookings *[]string, firstName string, lastName string) {
