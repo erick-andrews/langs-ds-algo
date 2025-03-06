@@ -6,9 +6,11 @@ import (
 	"strings"
 )
 
+const conferenceTickets uint = 50 // variable scope is package wide
+var conferenceName = "Go Conference"
+
 func main() {
-	conferenceName := "Go Conference"
-	const conferenceTickets uint = 50
+	// const ConferenceTickets uint = 50 Global variable scope... (exported)
 	var remainingTickets uint = 50
 
 	fmt.Println("Hello!")
@@ -44,7 +46,7 @@ func main() {
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
 func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, bool) {
-	var firstName string
+	var firstName string // defined vars in function, local scope.
 	var lastName string
 	var email string
 	var userTickets uint
@@ -70,7 +72,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 
 	firstNames := []string{}
 	for _, booking := range *bookings {
-		var names = strings.Fields(booking)
+		var names = strings.Fields(booking) // Create names only within for loop.. local scope.
 		firstNames = append(firstNames, names[0])
 	}
 
