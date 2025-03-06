@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"some-app/helper"
 	"strings"
 )
 
@@ -64,7 +63,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Println("Enter your # of tickets:")
 	fmt.Scan(&userTickets)
 
-	continueFlag := helper.ValidateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+	continueFlag := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
 	if !continueFlag {
 		fmt.Println("One of the inputs failed.")
 		return remainingTickets, continueFlag
@@ -118,4 +117,15 @@ func createArrays(bookings *[]string, firstName string, lastName string) {
 
 	fmt.Printf("These are all our bookings: %v\n", *bookings)
 
+}
+
+func validateUserInput(firstName string, lastName string, email string, userTickets uint, remainingTickets uint) bool {
+	isValidName := len(firstName) >= 1 && len(lastName) >= 1
+	isValidEmail := strings.Contains(email, "@")
+	isValidTickets := userTickets > 0 && userTickets > remainingTickets
+	if !isValidEmail || !isValidName || !isValidTickets {
+		return false
+	} else {
+		return true
+	}
 }
