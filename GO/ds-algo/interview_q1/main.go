@@ -14,6 +14,9 @@ func main() {
 	containsOverlap := containsCommonItem(a3, a4)
 	fmt.Printf("These arrays contain an overlap: %v\n", containsOverlap)
 
+	genericOverlapTest := containsCommonItemGeneric(a1, a2)
+	fmt.Printf("These arrays contain an overlap: %v\n", genericOverlapTest)
+
 }
 
 // func containsCommonItem(array1 []string, array2 []string) bool {
@@ -61,6 +64,7 @@ func containsCommonItem(array1 []string, array2 []string) bool {
 	return overlap
 }
 
+// Creating a generic to deal with int comparisons, or string comparisons, etc.
 func containsCommonItemGeneric[T comparable](array1 []T, array2 []T) bool {
 	// Take in our array1, make map
 	array1Map := make(map[T]bool, len(array1))
