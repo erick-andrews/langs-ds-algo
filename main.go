@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 const conferenceTickets uint = 50 // variable scope is package wide
@@ -46,7 +47,6 @@ func main() {
 			break
 		}
 	}
-
 	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
 	fmt.Println("The number of tickets left is:", remainingTickets)
 }
@@ -81,6 +81,8 @@ func askUserNameTicketsNum(bookings *[]UserData, remainingTickets uint) (uint, b
 		fmt.Println("One of the inputs failed.")
 		return remainingTickets, continueFlag
 	}
+
+	go sendTicket(firstName, lastName, email, userTickets)
 
 	firstNames := []string{}
 	for _, booking := range *bookings {
@@ -152,4 +154,17 @@ func validateUserInput(firstName string, lastName string, email string, userTick
 	} else {
 		return true
 	}
+}
+
+func sendTicket(firstName string, lastName string, email string, userTickets uint) {
+	// exploring concurrency in Go.
+	//stop execution of thread for 10 seconds.
+	time.Sleep(10 * time.Second) // simulate unresponsive. Playing with concurrency...
+	// generate ticket
+	// assign ticket var with Sprintf
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	// send the ticket via email
+	fmt.Println("#########")
+	fmt.Printf("Sending Ticket:\n %v to email address %v\n", ticket, email)
+	fmt.Println("#########")
 }
