@@ -172,3 +172,11 @@ func sendTicket(firstName string, lastName string, email string, userTickets uin
 	fmt.Println("#########")
 	wg.Done()
 }
+
+// Other languages support it but it's more complex.
+// threads vs goroutines is more expensive and requires more memory space.
+// Go is using what's called a "green thread", abstraction of an actual thread.
+// In go, we're only interacting with goroutine, instead of low level threads (OS)
+// you can use thousands or tens of thousands of threads and still keep things very fast.
+// Java for example uses os threads
+// Goroutines use channels which allows goroutines to talk to each other (shared data or dependency)
