@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -16,7 +17,11 @@ func main() {
 	fmt.Printf("Welcome to %v booking application \n", conferenceName)
 	//Let's see the types of the above vars:
 	fmt.Printf("conferenceTickets is %T, conferenceName is %T \n", conferenceTickets, conferenceName)
-	var bookings []string
+	// empty slice of maps
+	var bookings = make([]map[string]string, 0)
+
+	// working with maps
+
 	for {
 		// NoTicketsRemaining := remainingTickets == 0 if referencing
 		// this statement more than once, can be saved as var
@@ -44,7 +49,7 @@ func main() {
 
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
-func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, bool) {
+func askUserNameTicketsNum(bookings *[]map[string]string, remainingTickets uint) (uint, bool) {
 	var firstName string // defined vars in function, local scope.
 	var lastName string
 	var email string
@@ -64,6 +69,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	fmt.Scan(&userTickets)
 
 	continueFlag := validateUserInput(firstName, lastName, email, userTickets, remainingTickets)
+
 	if !continueFlag {
 		fmt.Println("One of the inputs failed.")
 		return remainingTickets, continueFlag
@@ -71,8 +77,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 
 	firstNames := []string{}
 	for _, booking := range *bookings {
-		var names = strings.Fields(booking) // Create names only within for loop.. local scope.
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"]) // Extract "firstName" key
 	}
 
 	fmt.Printf("The first names of bookings are %v\n", firstNames)
@@ -91,7 +96,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	//		break
 	// }
 
-	createArrays(bookings, firstName, lastName)
+	createArrays(bookings, firstName, lastName, email, userTickets)
 	remainingTickets -= userTickets
 
 	fmt.Printf("User %v %v booked %v tickets.\n", firstName, lastName, userTickets)
@@ -100,7 +105,7 @@ func askUserNameTicketsNum(bookings *[]string, remainingTickets uint) (uint, boo
 	return remainingTickets, continueFlag // Return the updated value
 }
 
-func createArrays(bookings *[]string, firstName string, lastName string) {
+func createArrays(bookings *[]map[string]string, firstName string, lastName string, email string, userTickets uint) {
 	// Arrays in Go are of a fixed size
 	// What kind of value do we want to store here? A list of names of users who booked tickets!
 	// Can be empty or already have things in it.
@@ -110,7 +115,14 @@ func createArrays(bookings *[]string, firstName string, lastName string) {
 	// var bookings [50]string
 
 	// But what about dynamic size list? A slice - array type under hood, but is dynamic in size.
-	*bookings = append(*bookings, firstName+" "+lastName)
+	// create a mapo for a user:
+	var userData = make(map[string]string) // map keys and values can only have same type.
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+
+	*bookings = append(*bookings, userData)
 	fmt.Printf("The whole array: %v\n", bookings)
 	fmt.Printf("Array type: %T\n", bookings)
 	fmt.Printf("Array length: %v\n", len(*bookings))
