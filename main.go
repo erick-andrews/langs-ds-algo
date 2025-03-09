@@ -2,12 +2,19 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 )
 
 const conferenceTickets uint = 50 // variable scope is package wide
 var conferenceName = "Go Conference"
+
+type UserData struct {
+	firstName       string
+	lastName        string
+	email           string
+	numberOfTickets uint
+	// isOptedInForNewsletter bool, etc.
+}
 
 func main() {
 	// const ConferenceTickets uint = 50 Global variable scope... (exported)
@@ -17,10 +24,10 @@ func main() {
 	fmt.Printf("Welcome to %v booking application \n", conferenceName)
 	//Let's see the types of the above vars:
 	fmt.Printf("conferenceTickets is %T, conferenceName is %T \n", conferenceTickets, conferenceName)
-	// empty slice of maps
-	var bookings = make([]map[string]string, 0)
 
-	// working with maps
+	// empty slice of maps
+	var bookings = make([]UserData, 0)
+	// working with structs
 
 	for {
 		// NoTicketsRemaining := remainingTickets == 0 if referencing
@@ -49,7 +56,7 @@ func main() {
 
 // ints: uint8-64, and int8-64. uint prohibits neg, int is neg to pos.
 
-func askUserNameTicketsNum(bookings *[]map[string]string, remainingTickets uint) (uint, bool) {
+func askUserNameTicketsNum(bookings *[]UserData, remainingTickets uint) (uint, bool) {
 	var firstName string // defined vars in function, local scope.
 	var lastName string
 	var email string
@@ -77,7 +84,7 @@ func askUserNameTicketsNum(bookings *[]map[string]string, remainingTickets uint)
 
 	firstNames := []string{}
 	for _, booking := range *bookings {
-		firstNames = append(firstNames, booking["firstName"]) // Extract "firstName" key
+		firstNames = append(firstNames, booking.firstName) // Extract "firstName" property of struct
 	}
 
 	fmt.Printf("The first names of bookings are %v\n", firstNames)
@@ -105,7 +112,7 @@ func askUserNameTicketsNum(bookings *[]map[string]string, remainingTickets uint)
 	return remainingTickets, continueFlag // Return the updated value
 }
 
-func createArrays(bookings *[]map[string]string, firstName string, lastName string, email string, userTickets uint) {
+func createArrays(bookings *[]UserData, firstName string, lastName string, email string, userTickets uint) {
 	// Arrays in Go are of a fixed size
 	// What kind of value do we want to store here? A list of names of users who booked tickets!
 	// Can be empty or already have things in it.
@@ -116,11 +123,16 @@ func createArrays(bookings *[]map[string]string, firstName string, lastName stri
 
 	// But what about dynamic size list? A slice - array type under hood, but is dynamic in size.
 	// create a mapo for a user:
-	var userData = make(map[string]string) // map keys and values can only have same type.
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
+	var userData = UserData{
+		firstName:       firstName,
+		lastName:        lastName,
+		email:           email,
+		numberOfTickets: userTickets,
+	} // map keys and values can only have same type.
+	// userData["firstName"] = firstName
+	// userData["lastName"] = lastName
+	// userData["email"] = email
+	// userData["numberOfTickets"] = strconv.FormatUint(uint64(userTickets), 10)
 
 	*bookings = append(*bookings, userData)
 	fmt.Printf("The whole array: %v\n", bookings)
