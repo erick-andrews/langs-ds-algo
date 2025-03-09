@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -17,6 +18,8 @@ type UserData struct {
 	// isOptedInForNewsletter bool, etc.
 }
 
+var wg = sync.WaitGroup{}
+
 func main() {
 	// const ConferenceTickets uint = 50 Global variable scope... (exported)
 	var remainingTickets uint = 50
@@ -30,25 +33,24 @@ func main() {
 	var bookings = make([]UserData, 0)
 	// working with structs
 
-	for {
-		// NoTicketsRemaining := remainingTickets == 0 if referencing
-		// this statement more than once, can be saved as var
-		if remainingTickets == 0 {
-			// end program
-			fmt.Println("Oops, our conference is totally booked. Come back next year.")
-			break
-		}
-		var shouldExit bool
+	// NoTicketsRemaining := remainingTickets == 0 if referencing
+	// this statement more than once, can be saved as var
+	if remainingTickets == 0 {
+		// end program
+		fmt.Println("Oops, our conference is totally booked. Come back next year.")
+		// break
+	}
+	var shouldExit bool
 
-		remainingTickets, shouldExit = askUserNameTicketsNum(&bookings, remainingTickets)
+	remainingTickets, shouldExit = askUserNameTicketsNum(&bookings, remainingTickets)
 
-		if shouldExit {
-			fmt.Println("Exiting program...")
-			break
-		}
+	if shouldExit {
+		fmt.Println("Exiting program...")
+		// break
 	}
 	//fmt.Printf("The number of tickets available is: %v and %v is the total left. \n", remainingTickets, conferenceTickets)
 	fmt.Println("The number of tickets left is:", remainingTickets)
+	wg.Wait() // wait for all wg threads to finish
 }
 
 // Data types supported:
@@ -82,7 +84,8 @@ func askUserNameTicketsNum(bookings *[]UserData, remainingTickets uint) (uint, b
 		return remainingTickets, continueFlag
 	}
 
-	go sendTicket(firstName, lastName, email, userTickets)
+	wg.Add(1)                                              // # of threads for main to wait for
+	go sendTicket(firstName, lastName, email, userTickets) // with no for loop, the main thread doesn't wait for other thread to finish.
 
 	firstNames := []string{}
 	for _, booking := range *bookings {
@@ -167,4 +170,5 @@ func sendTicket(firstName string, lastName string, email string, userTickets uin
 	fmt.Println("#########")
 	fmt.Printf("Sending Ticket:\n %v to email address %v\n", ticket, email)
 	fmt.Println("#########")
+	wg.Done()
 }
